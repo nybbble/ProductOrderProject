@@ -1,0 +1,37 @@
+CREATE OR REPLACE TRIGGER  "CUSTOMER_TRIG" 
+after insert on customer
+for each row
+begin
+insert into customer(tc, name, address) values (:new.tc, :new.name, :new.address);
+end;
+/
+ALTER TRIGGER  "CUSTOMER_TRIG" ENABLE;
+
+
+CREATE OR REPLACE TRIGGER  "DELETE_MESSAGE" 
+after delete on customer
+for each row
+begin
+dbms_output.put_line('You''ve deleted the record '||:old.tc||' from Customer table.');
+end;
+/
+ALTER TRIGGER  "DELETE_MESSAGE" ENABLE;
+
+
+CREATE SEQUENCE   "SEQ_CUST_ID"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE ;
+
+
+CREATE OR REPLACE TRIGGER  "TRIG_WITH_SEQ_CUST_ID" 
+  BEFORE INSERT ON CUSTOMER
+  FOR EACH ROW
+DECLARE
+BEGIN
+  IF( :new.TC IS NULL )
+  THEN
+    SELECT seq_cust_id.nextval
+      INTO :new.TC
+      FROM dual;
+  END IF;
+END;
+/
+ALTER TRIGGER  "TRIG_WITH_SEQ_CUST_ID" ENABLE;

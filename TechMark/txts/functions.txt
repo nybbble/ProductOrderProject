@@ -1,0 +1,19 @@
+create or replace FUNCTION minimum(tc1 number, tc2 number) 
+RETURN number IS
+  BEGIN
+       IF tc1 < tc2 THEN
+         RETURN tc1 ;
+       ELSE
+         RETURN tc2 ;
+    END IF;
+   END;
+
+
+create or replace FUNCTION Cust_Num
+    return number is 
+    cust_num_return number;
+
+    begin 
+    select count(tc) into cust_num_return from customer;
+    return cust_num_return;
+    end  Cust_Num;?
